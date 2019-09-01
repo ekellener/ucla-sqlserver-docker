@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+
+  db:
+    build:
+      context: .
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "w3@p@ssword"
+      ACCEPT_EULA: "Y"
+    healthcheck:
+      test: sqlcmd -S db1.internal.prod.example.com -U SA -P 'w3@p@ssword' -Q 'select distinct 1 from Adventureworks.dbo.DimDate'
+    networks:
+      mynetwork:
+        aliases:
+          - db1.internal.prod.example.com
+
+networks:
+  mynetwork:
+    driver: bridge
